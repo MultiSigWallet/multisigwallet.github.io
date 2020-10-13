@@ -1,0 +1,45 @@
+<html>
+<head>
+<title>deploy</title>
+<!--<script type="text/javascript" src="https://cdn.jsdelivr.net/gh/ethereum/web3.js/dist/web3.min.js"></script>-->
+<script type="text/javascript">
+
+var handelClickLi = () => {
+	try {
+	    window.ethereum.request({ method: 'eth_requestAccounts' })
+	        .then(async account => {
+	            window.location.reload()
+	        })
+	} catch (error) {
+	    console.log(error)
+	    alert('MateMask extension not installed or not enabled')
+	}
+}
+
+async function deploy() {
+	// compiled solidity source code using https://chriseth.github.io/cpp-ethereum/
+	//var code = "603d80600c6000396000f3007c01000000000000000000000000000000000000000000000000000000006000350463c6888fa18114602d57005b6007600435028060005260206000f3";
+	var code = document.getElementById("byteCode").value;
+	console.log(code);
+	
+	web3.eth.sendTransaction({from: web3.currentProvider.selectedAddress, data: code}, function(err, address) {
+		if (!err) {
+			console.log(address);
+			var addr_div = document.getElementById("addr_div");
+			addr_div.textContent = address;
+		}
+	});
+}
+
+</script>
+</head>
+<body>
+<!--button type="button" onclick="initConnection()">initConnection</button-->
+<button type="button" onclick="handelClickLi()">Connect</button>
+<button type="button" onclick="deploy()">Deploy</button>
+<div id="addr_div"></div><br />
+<!--<input type="text" id="byteCode" style="width:100%;height:400px"></input>-->
+<textarea name="" id="byteCode" cols="" rows="" style="width:100%;height:80%;vertical-align:top;outline:none;">603d80600c6000396000f3007c01000000000000000000000000000000000000000000000000000000006000350463c6888fa18114602d57005b6007600435028060005260206000f3</textarea>
+
+</body>
+</html>
